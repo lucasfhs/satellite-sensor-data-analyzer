@@ -31,6 +31,60 @@
     -fx-background-position: center;
     -fx-background-size: cover;
 }
+.welcome-card {
+    -fx-background-color: rgba(0, 0, 0, 0.82);
+    -fx-background-radius: 24px;
+    -fx-border-color: rgba(255, 255, 255, 0.55);
+    -fx-border-radius: 24px;
+    -fx-border-width: 1px;
+}
+.welcome-title {
+    -fx-font-family: "Ablation";
+    -fx-text-fill: white;
+}
+.welcome-subtitle {
+    -fx-font-family: "TheSeasons";
+    -fx-font-size: 18px;
+    -fx-text-fill: #d8cfea;
+}
+.welcome-hint {
+    -fx-font-size: 12px;
+    -fx-text-fill: #bcb5c9;
+}
+.demo-button, .database-button {
+    -fx-background-radius: 10px;
+    -fx-cursor: hand;
+    -fx-font-weight: bold;
+}
+.demo-button {
+    -fx-background-color: #735e9b;
+    -fx-text-fill: white;
+}
+.demo-button:hover {
+    -fx-background-color: #8972b5;
+}
+.database-button {
+    -fx-background-color: transparent;
+    -fx-border-color: #9d91b3;
+    -fx-border-radius: 10px;
+    -fx-text-fill: #eeeaf5;
+}
+.database-button:hover {
+    -fx-background-color: rgba(115, 94, 155, 0.35);
+}
+.connection-status {
+    -fx-text-fill: #d6d0df;
+    -fx-font-size: 11px;
+    -fx-alignment: center-right;
+}
+.mode-badge {
+    -fx-background-color: rgba(115, 94, 155, 0.9);
+    -fx-background-radius: 8px;
+    -fx-padding: 2px 7px;
+    -fx-text-fill: white;
+    -fx-font-size: 10px;
+    -fx-alignment: center;
+}
 .card {
     -fx-background-color: rgba(0, 0, 0,0.7);
     -fx-background-radius: 20px;

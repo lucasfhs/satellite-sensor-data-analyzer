@@ -1,114 +1,127 @@
 package com.aerospace.gui3d;
 
 import com.aerospace.gui3d.jpa.Dados;
-import com.aerospace.gui3d.jpa.DadosDAO;
+import com.aerospace.gui3d.telemetry.TelemetrySource;
+import java.util.Objects;
+import java.util.function.Consumer;
 import javafx.application.Platform;
 import javafx.scene.control.Label;
 
-/**
- * Class responsible for updating GUI elements based on data from a database.
- */
-public class Updater {
+/** Polls a telemetry source without blocking the JavaFX application thread. */
+public final class Updater {
 
-    private DadosDAO dadosDAO;
-    private Label[] labels; // Vetor de labels
-    private Model3D model3d;
-    private LineChartManager lineChartManager;
-    private double prevX;
-    private double prevY;
-    private double prevZ;
+    private final TelemetrySource source;
+    private final Label[] labels;
+    private final Model3D model3d;
+    private final LineChartManager lineChartManager;
+    private final Consumer<String> statusConsumer;
+    private double previousX;
+    private double previousY;
+    private double previousZ;
 
-    /**
-     * Constructor for Updater class.
-     *
-     * @param labels Array of labels to update
-     * @param model3d 3D model manager
-     * @param lineChartManager Line chart manager for data visualization
-     */
-    public Updater(Label[] labels, Model3D model3d, LineChartManager lineChartManager) {
-        this.labels = labels;  // Inicialização do vetor de labels
+    public Updater(TelemetrySource source, Label[] labels, Model3D model3d,
+                   LineChartManager lineChartManager, Consumer<String> statusConsumer) {
+        this.source = Objects.requireNonNull(source);
+        this.labels = labels;
         this.model3d = model3d;
-        this.dadosDAO = new DadosDAO(); // Instanciação do DAO para acessar os dados do banco
         this.lineChartManager = lineChartManager;
+        this.statusConsumer = statusConsumer;
     }
 
-    /**
-     * Starts a thread that continuously updates GUI labels with the latest data
-     * from the database. Uses Platform.runLater to ensure GUI updates are done
-     * on the JavaFX application thread.
-     */
     public void startUpdating() {
-        Thread updaterThread = new Thread(() -> {
-            try {
-                while (true) {
-                    Dados dadoMaisRecente = dadosDAO.buscarDadoMaisRecente();
-                    if (dadoMaisRecente != null) {
-                        Platform.runLater(() -> updateLabels(dadoMaisRecente));
+        Thread.ofPlatform().daemon().name("telemetry-updater").start(() -> {
+            try (source) {
+                while (!Thread.currentThread().isInterrupted()) {
+                    Dados latest = source.readLatest();
+                    if (latest != null) {
+                        Platform.runLater(() -> {
+                            updateLabels(latest);
+                            statusConsumer.accept("Telemetria recebida");
+                        });
+                    } else {
+                        Platform.runLater(() -> statusConsumer.accept("Aguardando telemetria..."));
                     }
-                    Thread.sleep(1000); // Espera 1 segundo antes de buscar novamente
+                    Thread.sleep(1000);
                 }
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } finally {
-                dadosDAO.fechar(); // Fecha o DAO ao finalizar
+            } catch (InterruptedException interrupted) {
+                Thread.currentThread().interrupt();
+            } catch (Exception error) {
+                Platform.runLater(() -> statusConsumer.accept("Sem conexão: " + rootMessage(error)));
             }
         });
-        updaterThread.setDaemon(true);
-        updaterThread.start();
     }
 
-    /**
-     * Updates the GUI labels with the provided data.
-     *
-     * @param dado Latest data object fetched from the database
-     */
-    private void updateLabels(Dados dado) {
-        // Atualiza as labels com os novos dados
-        labels[0].setText(String.format("%.2f", dado.getAcelerometroX()));
-        labels[1].setText(String.format("%.2f", dado.getAcelerometroY()));
-        labels[2].setText(String.format("%.2f", dado.getAcelerometroZ()));
-        labels[3].setText(String.format("%.2f", dado.getAnguloX()));
-        labels[4].setText(String.format("%.2f", dado.getAnguloY()));
-        labels[5].setText(String.format("%.2f", dado.getAnguloZ()));
-        labels[6].setText(String.format("%.2f", dado.getVelocidadeAngularX()));
-        labels[7].setText(String.format("%.2f", dado.getVelocidadeAngularY()));
-        labels[8].setText(String.format("%.2f", dado.getVelocidadeAngularZ()));
+    private void updateLabels(Dados data) {
+        labels[0].setText(format(data.getAcelerometroX()));
+        labels[1].setText(format(data.getAcelerometroY()));
+        labels[2].setText(format(data.getAcelerometroZ()));
+        labels[3].setText(format(data.getAnguloX()));
+        labels[4].setText(format(data.getAnguloY()));
+        labels[5].setText(format(data.getAnguloZ()));
+        labels[6].setText(format(data.getVelocidadeAngularX()));
+        labels[7].setText(format(data.getVelocidadeAngularY()));
+        labels[8].setText(format(data.getVelocidadeAngularZ()));
+        labels[9].setText(format(data.getAltitude()));
+        labels[10].setText(format(data.getBateria()));
+        labels[11].setText(format(data.getCorrenteBateria()));
+        labels[12].setText(format(data.getTensaoBateria()));
+        labels[13].setText(format(product(data.getCorrenteBateria(), data.getTensaoBateria())));
+        labels[14].setText(format(data.getCorrentePlacaSolar()));
+        labels[15].setText(format(data.getTensaoPlacaSolar()));
+        labels[16].setText(format(product(data.getCorrentePlacaSolar(), data.getTensaoPlacaSolar())));
+        labels[17].setText(format(data.getGas1()));
+        labels[18].setText(format(data.getGas2()));
+        labels[19].setText(format(data.getLuz1()));
+        labels[20].setText(format(data.getLuz2()));
+        labels[21].setText(format(data.getPontoOrvalho()));
+        labels[22].setText(format(data.getPressao()));
+        labels[23].setText(format(data.getSensorUV()));
+        labels[24].setText(format(data.getTemperaturaExterna()));
+        labels[25].setText(format(data.getTemperaturaInterna()));
+        labels[26].setText(format(data.getUmidade()));
 
-        labels[9].setText(String.format("%.2f", dado.getAltitude()));
-        labels[10].setText(String.format("%.2f", dado.getBateria()));
-        labels[11].setText(String.format("%.2f", dado.getCorrenteBateria()));
-        labels[12].setText(String.format("%.2f", dado.getTensaoBateria()));
-        labels[13].setText(String.format("%.2f", dado.getCorrenteBateria() * dado.getTensaoBateria()));
-
-        labels[14].setText(String.format("%.2f", dado.getCorrentePlacaSolar()));
-        labels[15].setText(String.format("%.2f", dado.getTensaoPlacaSolar()));
-        labels[16].setText(String.format("%.2f", dado.getCorrentePlacaSolar() * dado.getTensaoPlacaSolar()));
-
-        labels[17].setText(String.format("%.2f", dado.getGas1()));
-        labels[18].setText(String.format("%.2f", dado.getGas2()));
-        labels[19].setText(String.format("%.2f", dado.getLuz1()));
-        labels[20].setText(String.format("%.2f", dado.getLuz2()));
-        labels[21].setText(String.format("%.2f", dado.getPontoOrvalho()));
-        labels[22].setText(String.format("%.2f", dado.getPressao()));
-        labels[23].setText(String.format("%.2f", dado.getSensorUV()));
-        labels[24].setText(String.format("%.2f", dado.getTemperaturaExterna()));
-        labels[25].setText(String.format("%.2f", dado.getTemperaturaInterna()));
-        labels[26].setText(String.format("%.2f", dado.getUmidade()));
-
-        if (prevX != dado.getAnguloX() && prevY != dado.getAnguloY() && prevZ != dado.getAnguloZ()) {
-            model3d.rotateModel(dado.getAnguloX(), dado.getAnguloY(), dado.getAnguloZ());
-            prevX = dado.getAnguloX();
-            prevY = dado.getAnguloY();
-            prevZ = dado.getAnguloZ();
+        double angleX = value(data.getAnguloX());
+        double angleY = value(data.getAnguloY());
+        double angleZ = value(data.getAnguloZ());
+        if (previousX != angleX || previousY != angleY || previousZ != angleZ) {
+            model3d.rotateModel(angleX, angleY, angleZ);
+            previousX = angleX;
+            previousY = angleY;
+            previousZ = angleZ;
         }
 
-        lineChartManager.setyValueTemperaturaInterna(dado.getTemperaturaInterna());
-        lineChartManager.setyValueTemperaturaExterna(dado.getTemperaturaExterna());
-        lineChartManager.setyValueAltitude(dado.getAltitude());
-        lineChartManager.setyValueUmidade(dado.getUmidade());
-        lineChartManager.setyValuePotenciaBateria(dado.getCorrenteBateria() * dado.getTensaoBateria());
-        lineChartManager.setyValuePotenciaPainelSolar(dado.getCorrentePlacaSolar() * dado.getTensaoPlacaSolar());
-        lineChartManager.setyValuePressao(dado.getPressao());
-        lineChartManager.setyValueSensorUV(dado.getSensorUV());
+        lineChartManager.setyValueTemperaturaInterna(value(data.getTemperaturaInterna()));
+        lineChartManager.setyValueTemperaturaExterna(value(data.getTemperaturaExterna()));
+        lineChartManager.setyValueAltitude(value(data.getAltitude()));
+        lineChartManager.setyValueUmidade(value(data.getUmidade()));
+        lineChartManager.setyValuePotenciaBateria(product(data.getCorrenteBateria(), data.getTensaoBateria()));
+        lineChartManager.setyValuePotenciaPainelSolar(product(data.getCorrentePlacaSolar(), data.getTensaoPlacaSolar()));
+        lineChartManager.setyValuePressao(value(data.getPressao()));
+        lineChartManager.setyValueSensorUV(value(data.getSensorUV()));
+    }
+
+    private static String format(Float value) {
+        return value == null ? "--" : String.format("%.2f", value);
+    }
+
+    private static String format(double value) {
+        return String.format("%.2f", value);
+    }
+
+    private static double value(Float value) {
+        return value == null ? 0 : value;
+    }
+
+    private static double product(Float left, Float right) {
+        return value(left) * value(right);
+    }
+
+    private static String rootMessage(Throwable error) {
+        Throwable current = error;
+        while (current.getCause() != null) {
+            current = current.getCause();
+        }
+        String message = current.getMessage();
+        return message == null || message.isBlank() ? current.getClass().getSimpleName() : message;
     }
 }

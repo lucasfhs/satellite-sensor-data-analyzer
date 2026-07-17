@@ -5,8 +5,6 @@
 package com.aerospace.gui3d;
 
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import javafx.animation.RotateTransition;
 
 import javafx.scene.Group;
@@ -87,9 +85,8 @@ public class Model3D {
     private void initMesh() {
         TriangleMesh mesh = null;
         try {
-            Path currentDir = Paths.get(System.getProperty("user.dir"));
-            Path filePath = currentDir.resolve("src/main/resources/com/aerospace/gui3d/assets/obj/CubesatSTL.obj");
-            mesh = OBJLoader.load(filePath.toString());
+            mesh = OBJLoader.load(Model3D.class.getResourceAsStream(
+                    "/com/aerospace/gui3d/assets/obj/CubesatSTL.obj"));
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -251,12 +248,19 @@ public class Model3D {
      * @param angleZ The angle to rotate around the z-axis.
      */
     public void rotateModel(double angleX, double angleY, double angleZ) {
+        if (meshView == null) {
+            return;
+        }
         rotateX = angleX;
         rotateY = angleY;
         rotateZ = angleZ;
 
         double totalAngle = Math.sqrt(angleX * angleX + angleY * angleY + angleZ * angleZ); // Calcula o ângulo total
-        javafx.geometry.Point3D axis = new javafx.geometry.Point3D(angleX, angleY, angleZ).normalize(); // Normaliza o vetor de eixo
+        javafx.geometry.Point3D vector = new javafx.geometry.Point3D(angleX, angleY, angleZ);
+        if (vector.magnitude() == 0) {
+            return;
+        }
+        javafx.geometry.Point3D axis = vector.normalize(); // Normaliza o vetor de eixo
 
         RotateTransition rotation = new RotateTransition(Duration.seconds(1), meshView);
         rotation.setAxis(axis);

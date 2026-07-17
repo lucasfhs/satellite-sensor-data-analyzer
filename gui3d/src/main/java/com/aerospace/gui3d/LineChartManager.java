@@ -23,7 +23,7 @@ public class LineChartManager {
 
     private LineChart<String, Number> lineChart;
     private Map<String, XYChart.Series<String, Number>> seriesMap;
-    private Random random;
+    private String activeSeriesName;
     private double yValue;
     private double yValueAltitude;
     private double yValueTemperaturaInterna;
@@ -44,7 +44,6 @@ public class LineChartManager {
      */
     public LineChartManager(LineChart<String, Number> lineChart) {
         this.lineChart = lineChart;
-        this.random = new Random();
         this.startTimeMs = System.currentTimeMillis();
         this.seriesMap = new LinkedHashMap<>();
         initializeChart();
@@ -154,7 +153,6 @@ public class LineChartManager {
         // Adicionar dados aleatórios para a série ativa
         XYChart.Series<String, Number> activeSeries = seriesMap.get(activeSeriesName);
         if (activeSeries != null) {
-            double randomValue = random.nextDouble() * 100; // Valor aleatório entre 0 e 100
             activeSeries.getData().add(new XYChart.Data<>(String.valueOf(elapsedMillis / 1000), yValue));
 
             // Limitar a quantidade de pontos no gráfico para manter a performance
@@ -191,13 +189,16 @@ public class LineChartManager {
         // Ocultar todas as séries e mostrar apenas a série selecionada
         for (XYChart.Series<String, Number> series : seriesMap.values()) {
             boolean isActive = series.getName().equals(seriesName);
-            series.getNode().setVisible(isActive);
+            if (series.getNode() != null) {
+                series.getNode().setVisible(isActive);
+            }
 
             // Atualizar título do gráfico com o nome da série ativa
             if (isActive) {
                 lineChart.setTitle(seriesName);
             }
         }
+        activeSeriesName = seriesName;
 
         // Definir valores mínimos e máximos nos eixos
         NumberAxis yAxis = (NumberAxis) lineChart.getYAxis();
@@ -238,7 +239,9 @@ public class LineChartManager {
         // Definir cor da linha do gráfico
         String style = String.format("-fx-stroke: rgb(%d, %d, %d);", red, green, blue);
         for (XYChart.Series<String, Number> series : seriesMap.values()) {
-            series.getNode().setStyle(style);
+            if (series.getNode() != null) {
+                series.getNode().setStyle(style);
+            }
         }
     }
 
@@ -254,7 +257,9 @@ public class LineChartManager {
         String style = String.format("-fx-text-fill: rgb(%d, %d, %d);", red, green, blue);
         for (XYChart.Series<String, Number> series : seriesMap.values()) {
             for (XYChart.Data<String, Number> data : series.getData()) {
-                data.getNode().lookup(".chart-line-symbol").setStyle(style); // Aplicar a cor ao texto
+                if (data.getNode() != null && data.getNode().lookup(".chart-line-symbol") != null) {
+                    data.getNode().lookup(".chart-line-symbol").setStyle(style);
+                }
             }
         }
     }
@@ -313,11 +318,15 @@ public class LineChartManager {
     private void customizeChart() {
         // Definir borda arredondada
         Region chartRegion = (Region) lineChart.lookup(".chart-plot-background");
-        chartRegion.setStyle("-fx-background-radius: 20px;");
+        if (chartRegion != null) {
+            chartRegion.setStyle("-fx-background-radius: 20px; -fx-background-color: rgba(0, 0, 0, 1);");
+        }
 
         // Modificar o background da área de plotagem (dados do gráfico)
         Region plotBackground = (Region) lineChart.lookup(".chart-plot-background");
-        plotBackground.setStyle("-fx-background-color: rgba(0, 0, 0, 1);"); // Cor de fundo com transparência
+        if (plotBackground != null) {
+            plotBackground.setStyle("-fx-background-color: rgba(0, 0, 0, 1);");
+        }
 
         // Modificar o background da área de tabulação (eixos, legendas)
     }
@@ -328,12 +337,7 @@ public class LineChartManager {
      * @return The name of the active series.
      */
     public String getActiveSeriesName() {
-        for (Map.Entry<String, XYChart.Series<String, Number>> entry : seriesMap.entrySet()) {
-            if (entry.getValue().getNode().isVisible()) {
-                return entry.getKey();
-            }
-        }
-        return ""; // Retornar uma string vazia caso não haja série visível (embora isso não deva ocorrer com a lógica existente)
+        return activeSeriesName == null ? "" : activeSeriesName;
     }
 
     public double getyValue() {

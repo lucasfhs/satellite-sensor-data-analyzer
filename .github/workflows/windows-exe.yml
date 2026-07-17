@@ -1,0 +1,77 @@
+name: Build Windows x64 EXE
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main, master]
+    tags: ["v*"]
+  pull_request:
+    branches: [main, master]
+
+permissions:
+  contents: read
+
+jobs:
+  build-windows-x64:
+    name: Windows x64 installer
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: pwsh
+        working-directory: gui3d
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Java 21 x64
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+          architecture: x64
+          cache: maven
+
+      - name: Compile and assemble application
+        run: mvn -B --no-transfer-progress clean verify
+
+      - name: Ensure WiX Toolset is available
+        run: |
+          if (-not (Get-Command light.exe -ErrorAction SilentlyContinue)) {
+            choco install wixtoolset --no-progress -y
+            $wixBin = Get-ChildItem "${env:ProgramFiles(x86)}\WiX Toolset v3*\bin" -Directory |
+              Sort-Object FullName -Descending |
+              Select-Object -First 1 -ExpandProperty FullName
+            if (-not $wixBin) { throw "WiX Toolset 3.x não foi encontrado." }
+            $wixBin | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+            $env:PATH = "$wixBin;$env:PATH"
+          }
+
+      - name: Build self-contained EXE installer
+        run: |
+          New-Item -ItemType Directory -Force -Path target\installer | Out-Null
+          jpackage `
+            --type exe `
+            --name SatelliteSensorAnalyzer `
+            --app-version 2.0.0 `
+            --vendor "CEFET-MG Aerospace" `
+            --description "Analisador de telemetria de CubeSat" `
+            --input target\app `
+            --main-jar gui3d-2.0.0.jar `
+            --main-class com.aerospace.gui3d.AppLauncher `
+            --dest target\installer `
+            --add-modules ALL-MODULE-PATH `
+            --java-options "-Dfile.encoding=UTF-8" `
+            --win-dir-chooser `
+            --win-menu `
+            --win-menu-group "Satellite Sensor Analyzer" `
+            --win-shortcut `
+            --win-per-user-install
+
+      - name: Upload Windows installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: SatelliteSensorAnalyzer-windows-x64
+          path: gui3d/target/installer/*.exe
+          if-no-files-found: error
+          retention-days: 14

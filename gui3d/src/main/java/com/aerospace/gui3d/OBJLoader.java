@@ -4,6 +4,9 @@ import javafx.scene.shape.TriangleMesh;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,12 +26,26 @@ public class OBJLoader {
      */
     
     public static TriangleMesh load(String objFilePath) throws IOException {
+        try (BufferedReader reader = new BufferedReader(new FileReader(objFilePath))) {
+            return load(reader);
+        }
+    }
+
+    public static TriangleMesh load(InputStream input) throws IOException {
+        if (input == null) {
+            throw new IOException("Modelo 3D não encontrado nos recursos da aplicação");
+        }
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(input, StandardCharsets.UTF_8))) {
+            return load(reader);
+        }
+    }
+
+    private static TriangleMesh load(BufferedReader reader) throws IOException {
         TriangleMesh mesh = new TriangleMesh();
 
         List<Float> vertices = new ArrayList<>();
         List<Integer> faces = new ArrayList<>();
 
-        BufferedReader reader = new BufferedReader(new FileReader(objFilePath));
         String line;
 
         while ((line = reader.readLine()) != null) {
@@ -53,8 +70,6 @@ public class OBJLoader {
                 }
             }
         }
-
-        reader.close();
 
         // Convertendo listas para arrays primitivos
         float[] verticesArray = new float[vertices.size()];

@@ -47,7 +47,9 @@ public class BancodeDeDados {
                 Thread.sleep(1000); // Espera 1 segundo antes de buscar novamente
             }
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            Thread.currentThread().interrupt();
+        } catch (Exception e) {
+            System.err.println("Não foi possível ler a telemetria: " + e.getMessage());
         } finally {
             dadosDAO.fechar();
         }

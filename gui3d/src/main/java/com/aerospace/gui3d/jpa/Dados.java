@@ -1,98 +1,63 @@
 package com.aerospace.gui3d.jpa;
 
-import javax.persistence.*;
-
-@Entity
-@Table(name = "dados")
 public class Dados {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private int id;
 
-    @Column(name = "cubesat")
     private int cubesat;
 
-    @Column(name = "acelerometroX")
     private Float acelerometroX;
 
-    @Column(name = "acelerometroY")
     private Float acelerometroY;
 
-    @Column(name = "acelerometroZ")
     private Float acelerometroZ;
 
-    @Column(name = "anguloX")
     private Float anguloX;
 
-    @Column(name = "anguloY")
     private Float anguloY;
 
-    @Column(name = "anguloZ")
     private Float anguloZ;
 
-    @Column(name = "altitude")
     private Float altitude;
 
-    @Column(name = "bateria")
     private Float bateria;
 
-    @Column(name = "correnteBateria")
     private Float correnteBateria;
 
-    @Column(name = "correntePlacaSolar")
     private Float correntePlacaSolar;
 
-    @Column(name = "gas1")
     private Float gas1;
 
-    @Column(name = "gas2")
     private Float gas2;
 
-    @Column(name = "luz1")
     private Float luz1;
 
-    @Column(name = "luz2")
     private Float luz2;
 
-    @Column(name = "pontoOrvalho")
     private Float pontoOrvalho;
 
-    @Column(name = "pressao")
     private Float pressao;
 
-    @Column(name = "sensorUV")
     private Float sensorUV;
 
-    @Column(name = "temperaturaExterna")
     private Float temperaturaExterna;
 
-    @Column(name = "temperaturaInterna")
     private Float temperaturaInterna;
 
-    @Column(name = "tensaoBateria")
     private Float tensaoBateria;
 
-    @Column(name = "tensaoPlacaSolar")
     private Float tensaoPlacaSolar;
 
-    @Column(name = "umidade")
     private Float umidade;
 
-    @Column(name = "velocidade")
     private Float velocidade;
 
-    @Column(name = "velocidadeAngularX")
     private Float velocidadeAngularX;
 
-    @Column(name = "velocidadeAngularY")
     private Float velocidadeAngularY;
 
-    @Column(name = "velocidadeAngularZ")
     private Float velocidadeAngularZ;
 
-    @Column(name = "dataObtencao")
     private String dataObtencao;
 
     // Getters

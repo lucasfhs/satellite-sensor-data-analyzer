@@ -1,16 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Button?>
-<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.aerospace.gui3d.controllers.PrimaryController">
-   <children>
-      <Label text="Primary View" />
-      <Button fx:id="primaryButton" text="Switch to Secondary View" onAction="#switchToSecondary"/>
-   </children>
-   <padding>
-      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-   </padding>
-</VBox>
+<AnchorPane minHeight="720.0" minWidth="1280.0" prefHeight="720.0" prefWidth="1280.0"
+            styleClass="body" stylesheets="@../assets/css/gui.css"
+            xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.aerospace.gui3d.controllers.PrimaryController">
+    <children>
+        <AnchorPane layoutX="380.0" layoutY="155.0" prefHeight="410.0" prefWidth="520.0" styleClass="welcome-card">
+            <children>
+                <ImageView fitHeight="92.0" fitWidth="108.0" layoutX="206.0" layoutY="34.0" preserveRatio="true">
+                    <image>
+                        <Image url="@../assets/img/cubeicon.png" />
+                    </image>
+                </ImageView>
+                <Label alignment="CENTER" layoutX="35.0" layoutY="132.0" prefHeight="40.0" prefWidth="450.0"
+                       styleClass="welcome-title" text="CUBESAT TELEMETRY">
+                    <font><Font size="28.0" /></font>
+                </Label>
+                <Label alignment="CENTER" layoutX="55.0" layoutY="178.0" prefHeight="46.0" prefWidth="410.0"
+                       styleClass="welcome-subtitle" text="Satellite Sensor Data Analyzer" wrapText="true" />
+                <Button layoutX="110.0" layoutY="245.0" mnemonicParsing="false" onAction="#startDemo"
+                        prefHeight="48.0" prefWidth="300.0" styleClass="demo-button"
+                        text="INICIAR DEMONSTRAÇÃO" />
+                <Button layoutX="110.0" layoutY="307.0" mnemonicParsing="false" onAction="#startDatabase"
+                        prefHeight="42.0" prefWidth="300.0" styleClass="database-button"
+                        text="CONECTAR AO POSTGRESQL" />
+                <Label alignment="CENTER" layoutX="55.0" layoutY="365.0" prefWidth="410.0"
+                       styleClass="welcome-hint" text="A demonstração funciona sem banco de dados." />
+            </children>
+        </AnchorPane>
+    </children>
+</AnchorPane>

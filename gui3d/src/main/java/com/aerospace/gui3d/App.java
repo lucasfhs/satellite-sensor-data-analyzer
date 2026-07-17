@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -15,6 +16,7 @@ import java.io.IOException;
 public class App extends Application {
 
     private static Scene scene;
+    private static AppMode mode = AppMode.DEMO;
     /**
      * Starts the JavaFX application.
      *
@@ -23,9 +25,30 @@ public class App extends Application {
      */
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("primary"), 1280, 720);
+        String initialView = "primary";
+        if (getParameters().getRaw().contains("--demo")) {
+            mode = AppMode.DEMO;
+            initialView = "Data3DViewer";
+        }
+        scene = new Scene(loadFXML(initialView), 1280, 720);
         stage.setScene(scene);
+        stage.setTitle("Satellite Sensor Data Analyzer");
+        stage.setMinWidth(1280);
+        stage.setMinHeight(720);
+        var icon = App.class.getResourceAsStream("assets/img/cubeicon.png");
+        if (icon != null) {
+            stage.getIcons().add(new Image(icon));
+        }
         stage.show();
+    }
+
+    public static void openViewer(AppMode selectedMode) throws IOException {
+        mode = selectedMode;
+        setRoot("Data3DViewer");
+    }
+
+    public static AppMode getMode() {
+        return mode;
     }
     /**
      * Changes the root FXML file of the scene.

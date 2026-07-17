@@ -3,11 +3,14 @@ package com.aerospace.gui3d.controllers;
 import com.aerospace.gui3d.LineChartManager;
 import com.aerospace.gui3d.Model3D;
 import com.aerospace.gui3d.Updater;
-import javafx.event.ActionEvent;
+import com.aerospace.gui3d.App;
+import com.aerospace.gui3d.AppMode;
+import com.aerospace.gui3d.telemetry.DatabaseTelemetrySource;
+import com.aerospace.gui3d.telemetry.DemoTelemetrySource;
+import com.aerospace.gui3d.telemetry.TelemetrySource;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.chart.LineChart;
-import javafx.scene.control.Button;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.AnchorPane;
@@ -128,8 +131,12 @@ public class Data3DViewerController {
     @FXML
     private AnchorPane anchorPane3d;
 
-    private Label[] labels;
-    private LineChartManager lineChartManager;
+    @FXML
+    private Label labelMode;
+
+    @FXML
+    private Label labelConnectionStatus;
+
     private LineChartManager chartManager;
     /**
      * Configures actions for the menu items in the GUI.
@@ -177,8 +184,16 @@ public class Data3DViewerController {
             labelTemperaturaInterna, labelUmidade
         };
 
-        // Inicializando o Updater com as labels correspondentes
-        Updater updater = new Updater(labels, model3D, chartManager);
+        AppMode mode = App.getMode();
+        labelMode.setText(mode.getDisplayName());
+        labelConnectionStatus.setText(mode == AppMode.DEMO
+                ? "Gerando telemetria local..."
+                : "Conectando ao PostgreSQL...");
+        TelemetrySource source = mode == AppMode.DEMO
+                ? new DemoTelemetrySource()
+                : new DatabaseTelemetrySource();
+        Updater updater = new Updater(source, labels, model3D, chartManager,
+                labelConnectionStatus::setText);
         updater.startUpdating();
 
     }
