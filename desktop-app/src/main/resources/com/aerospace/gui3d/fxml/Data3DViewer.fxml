@@ -1,0 +1,384 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  Copyright (c) 2015, 2019, Gluon and/or its affiliates.
+  All rights reserved. Use is subject to license terms.
+
+  This file is available and licensed under the following license:
+
+  Redistribution and use in source and binary forms, with or without
+  modification, are permitted provided that the following conditions
+  are met:
+
+  - Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+  - Redistributions in binary form must reproduce the above copyright
+    notice, this list of conditions and the following disclaimer in
+    the documentation and/or other materials provided with the distribution.
+  - Neither the name of Oracle Corporation nor the names of its
+    contributors may be used to endorse or promote products derived
+    from this software without specific prior written permission.
+
+  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+  A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+  OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+  DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+  THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+
+<?import java.lang.String?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.effect.Bloom?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<VBox prefHeight="400.0" prefWidth="640.0" stylesheets="@../assets/css/gui.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.aerospace.gui3d.controllers.Data3DViewerController">
+  <children>
+    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" minHeight="720.0" minWidth="1280.0" prefHeight="-1.0" prefWidth="-1.0" styleClass="body" stylesheets="@../assets/css/gui.css" VBox.vgrow="ALWAYS">
+         <children>
+            <Label fx:id="labelConnectionStatus" layoutX="925.0" layoutY="68.0" prefWidth="195.0" styleClass="connection-status" text="Iniciando..." />
+            <Label fx:id="labelMode" layoutX="1120.0" layoutY="68.0" prefWidth="127.0" styleClass="mode-badge" text="Modo" />
+            <Line endX="1047.6666259765625" layoutX="171.0" layoutY="67.0" startX="-121.66667175292969" stroke="WHITE" strokeWidth="1.5" styleClass="menu-bar" />
+            <Pane layoutX="26.0" layoutY="89.0" prefHeight="601.0" prefWidth="1221.0" styleClass="card" stylesheets="@../assets/css/gui.css">
+               <children>
+                  <AnchorPane layoutX="581.0" layoutY="268.0" prefHeight="320.0" prefWidth="592.0" style="-fx-background-color: #000000;" styleClass="pane">
+                     <children>
+                        <LineChart fx:id="lineChart" layoutX="9.0" layoutY="26.0" prefHeight="296.0" prefWidth="574.0" style="-fx-background-color: #000000;">
+                          <xAxis>
+                            <CategoryAxis side="BOTTOM" />
+                          </xAxis>
+                          <yAxis>
+                            <NumberAxis side="LEFT" />
+                          </yAxis>
+                        </LineChart>
+                        <MenuBar fx:id="menuBarTrocarGrafico" layoutX="473.0" layoutY="-1.0" styleClass="graphMenu" stylesheets="@../assets/css/gui.css">
+                          <menus>
+                            <Menu mnemonicParsing="false" text="Trocar Gráfico">
+                              <items>
+                                <MenuItem fx:id="menuItemTemperatura" mnemonicParsing="false" text="Temperatura(Int.)" />
+                                    <MenuItem fx:id="menuItemAltitude" mnemonicParsing="false" text="Altitude" />
+                                    <MenuItem fx:id="menuItemUmidade" mnemonicParsing="false" text="Umidade" />
+                                    <MenuItem fx:id="menuItemPotenciaBateria" mnemonicParsing="false" text="Potência(Bateria)" />
+                                    <MenuItem fx:id="menuItemPotenciaPainelSolar" mnemonicParsing="false" text="Potência(Painel Solar)" />
+                                    <MenuItem fx:id="menuItemPressao" mnemonicParsing="false" text="Pressão" />
+                                    <MenuItem fx:id="menuItemSensorUV" mnemonicParsing="false" text="SensorUV" />
+                              </items>
+                            </Menu>
+                          </menus>
+                        </MenuBar>
+                     </children></AnchorPane>
+                  <Line endX="257.33331298828125" layoutX="570.0" layoutY="304.0" rotate="90.0" startX="-300.0" stroke="WHITE" strokeWidth="2.0" />
+                  <AnchorPane layoutX="576.0" layoutY="34.0" prefHeight="216.0" prefWidth="261.0" styleClass="pane">
+                     <children>
+                        <Text fill="WHITE" layoutX="18.0" layoutY="28.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Temperatura(Interna):" />
+                        <Text fill="WHITE" layoutX="19.0" layoutY="85.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Altitude:" />
+                        <Text fill="WHITE" layoutX="19.0" layoutY="143.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Umidade:" />
+                        <Text fill="WHITE" layoutX="19.0" layoutY="114.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Bateria(%):" />
+                        <Text fill="WHITE" layoutX="18.0" layoutY="56.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Temperatura(Externa):" />
+                        <Text fill="WHITE" layoutX="20.0" layoutY="171.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Luz(1):" />
+                        <Text fill="WHITE" layoutX="20.0" layoutY="200.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Luz(2):" />
+                        <Label fx:id="labelTemperaturaInterna" layoutX="172.0" layoutY="16.0" text="000.00" textAlignment="CENTER" textFill="#e1e1e1">
+                           <font>
+                              <Font name="Monospaced Regular" size="13.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="labelTemperaturaExterna" layoutX="175.0" layoutY="43.0" text="000.00" textAlignment="CENTER" textFill="#e1e1e1">
+                           <font>
+                              <Font name="Monospaced Regular" size="13.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="labelAltitude" layoutX="82.0" layoutY="73.0" text="000.00" textAlignment="CENTER" textFill="#e1e1e1">
+                           <font>
+                              <Font name="Monospaced Regular" size="13.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="labelBateria" layoutX="100.0" layoutY="102.0" text="000.00" textAlignment="CENTER" textFill="#e1e1e1">
+                           <font>
+                              <Font name="Monospaced Regular" size="13.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="labelUmidade" layoutX="90.0" layoutY="131.0" text="000.00" textAlignment="CENTER" textFill="#e1e1e1">
+                           <font>
+                              <Font name="Monospaced Regular" size="13.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="labelLuz1" layoutX="74.0" layoutY="159.0" text="000.00" textAlignment="CENTER" textFill="#e1e1e1">
+                           <font>
+                              <Font name="Monospaced Regular" size="13.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="labelLuz2" layoutX="75.0" layoutY="188.0" text="000.00" textAlignment="CENTER" textFill="#e1e1e1">
+                           <font>
+                              <Font name="Monospaced Regular" size="13.0" />
+                           </font>
+                        </Label>
+                     </children></AnchorPane>
+                  <AnchorPane fx:id="anchorPane3d" layoutX="19.0" layoutY="118.0" prefHeight="477.0" prefWidth="504.0" styleClass="card-3d" />
+                  <AnchorPane layoutX="854.0" layoutY="34.0" prefHeight="216.0" prefWidth="364.0" styleClass="pane">
+                     <children>
+                        <Text fill="WHITE" layoutX="12.0" layoutY="32.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Corrente(Bateria):" />
+                        <Text fill="WHITE" layoutX="13.0" layoutY="97.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tensão(Bateria):" />
+                        <Text fill="WHITE" layoutX="13.0" layoutY="162.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Potência(Bateria):" />
+                        <Text fill="WHITE" layoutX="13.0" layoutY="129.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tensão(Placa Solar):" />
+                        <Text fill="WHITE" layoutX="12.0" layoutY="64.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Corrente(Placa Solar):" />
+                        <Text fill="WHITE" layoutX="14.0" layoutY="194.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Potência(Placa Solar):" />
+                        <Text fill="WHITE" layoutX="214.0" layoutY="32.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Gás(1):" />
+                        <Text fill="WHITE" layoutX="214.0" layoutY="64.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Gás(2):" />
+                        <Text fill="WHITE" layoutX="214.0" layoutY="97.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Sensor(UV):" />
+                        <Text fill="WHITE" layoutX="214.0" layoutY="129.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Pressão:" />
+                        <Text fill="WHITE" layoutX="215.0" layoutY="162.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ponto Orvalho:" />
+                        <Text fill="WHITE" layoutX="215.0" layoutY="194.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Horário:" />
+                        <Label fx:id="labelCorrenteBateria" layoutX="138.0" layoutY="19.0" text="000.00" textAlignment="CENTER" textFill="#e1e1e1">
+                           <font>
+                              <Font name="Monospaced Regular" size="13.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="labelCorrentePlacaSolar" layoutX="159.0" layoutY="51.0" text="000.00" textAlignment="CENTER" textFill="#e1e1e1">
+                           <font>
+                              <Font name="Monospaced Regular" size="13.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="labelTensaoBateria" layoutX="130.0" layoutY="84.0" text="000.00" textAlignment="CENTER" textFill="#e1e1e1">
+                           <font>
+                              <Font name="Monospaced Regular" size="13.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="labelTensaoPlacaSolar" layoutX="152.0" layoutY="116.0" text="000.00" textAlignment="CENTER" textFill="#e1e1e1">
+                           <font>
+                              <Font name="Monospaced Regular" size="13.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="labelPotenciaBateria" layoutX="136.0" layoutY="149.0" text="000.00" textAlignment="CENTER" textFill="#e1e1e1">
+                           <font>
+                              <Font name="Monospaced Regular" size="13.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="labelPotenciaPlacaSolar" layoutX="160.0" layoutY="181.0" text="000.00" textAlignment="CENTER" textFill="#e1e1e1">
+                           <font>
+                              <Font name="Monospaced Regular" size="13.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="labelGas1" layoutX="269.0" layoutY="20.0" text="000.00" textAlignment="CENTER" textFill="#e1e1e1">
+                           <font>
+                              <Font name="Monospaced Regular" size="13.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="labelGas2" layoutX="268.0" layoutY="52.0" text="000.00" textAlignment="CENTER" textFill="#e1e1e1">
+                           <font>
+                              <Font name="Monospaced Regular" size="13.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="labelPressao" layoutX="277.0" layoutY="117.0" text="000.00" textAlignment="CENTER" textFill="#e1e1e1">
+                           <font>
+                              <Font name="Monospaced Regular" size="13.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="labelSensorUV" layoutX="299.0" layoutY="85.0" text="000.00" textAlignment="CENTER" textFill="#e1e1e1">
+                           <font>
+                              <Font name="Monospaced Regular" size="13.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="labelPontoOrvalho" layoutX="318.0" layoutY="150.0" text="00.0" textAlignment="CENTER" textFill="#e1e1e1">
+                           <font>
+                              <Font name="Monospaced Regular" size="13.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="273.0" layoutY="182.0" text="XX-XX-XX" textAlignment="CENTER" textFill="#e1e1e1">
+                           <font>
+                              <Font name="Monospaced Regular" size="13.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </AnchorPane>
+                  <Text fill="WHITE" layoutX="906.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="Ablation" text="Energia" textAlignment="CENTER">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Text>
+                  <Text fill="WHITE" layoutX="1085.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="Ablation" text="Extras" textAlignment="CENTER">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Text>
+                  <Text fill="WHITE" layoutX="599.0" layoutY="28.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Dados do Satélite" textAlignment="CENTER">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                     <styleClass>
+                        <String fx:value="Ablation" />
+                        <String fx:value="short-letter-space" />
+                     </styleClass>
+                  </Text>
+                  <AnchorPane layoutX="129.0" layoutY="41.0" prefHeight="73.0" prefWidth="389.0" styleClass="pane">
+                     <children>
+                        <Label fx:id="labelRotationX" layoutX="59.0" layoutY="5.0" text="000.00" textAlignment="CENTER" textFill="#e1e1e1">
+                           <font>
+                              <Font name="Monospaced Regular" size="13.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="labelRotationY" layoutX="171.0" layoutY="5.0" text="000.00" textAlignment="CENTER" textFill="#e1e1e1">
+                           <font>
+                              <Font name="Monospaced Regular" size="13.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="labelRotationZ" layoutX="289.0" layoutY="4.0" text="000.00" textAlignment="CENTER" textFill="#e1e1e1">
+                           <font>
+                              <Font name="Monospaced Regular" size="13.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="labelAccelerationX" layoutX="58.0" layoutY="27.0" text="000.00" textAlignment="CENTER" textFill="#e1e1e1">
+                           <font>
+                              <Font name="Monospaced Regular" size="13.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="labelAccelerationY" layoutX="170.0" layoutY="27.0" text="000.00" textAlignment="CENTER" textFill="#e1e1e1">
+                           <font>
+                              <Font name="Monospaced Regular" size="13.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="labelAccelerationZ" layoutX="288.0" layoutY="26.0" text="000.00" textAlignment="CENTER" textFill="#e1e1e1">
+                           <font>
+                              <Font name="Monospaced Regular" size="13.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="labelSpeedX" layoutX="58.0" layoutY="50.0" text="000.00" textAlignment="CENTER" textFill="#e1e1e1">
+                           <font>
+                              <Font name="Monospaced Regular" size="13.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="labelSpeedY" layoutX="170.0" layoutY="50.0" text="000.00" textAlignment="CENTER" textFill="#e1e1e1">
+                           <font>
+                              <Font name="Monospaced Regular" size="13.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="labelSpeedZ" layoutX="288.0" layoutY="49.0" text="000.00" textAlignment="CENTER" textFill="#e1e1e1">
+                           <font>
+                              <Font name="Monospaced Regular" size="13.0" />
+                           </font>
+                        </Label>
+                     </children></AnchorPane>
+                  <Text fill="WHITE" layoutX="207.0" layoutY="17.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Navegação" textAlignment="CENTER">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                     <styleClass>
+                        <String fx:value="Ablation" />
+                        <String fx:value="short-letter-space" />
+                     </styleClass>
+                  </Text>
+                  <Text fill="WHITE" layoutX="180.0" layoutY="38.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="Ablation" text="Eixo X">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Text>
+                  <Text fill="WHITE" layoutX="296.0" layoutY="38.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="Ablation" text="Eixo Y">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Text>
+                  <Text fill="WHITE" layoutX="411.0" layoutY="38.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="Ablation" text="Eixo Z">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Text>
+                  <Text fill="WHITE" layoutX="16.0" layoutY="63.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="Ablation" text="Rotação">
+                     <font>
+                        <Font size="14.0" />
+                     </font></Text>
+                  <Text fill="WHITE" layoutX="14.0" layoutY="84.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="Ablation" text="Aceleração">
+                     <font>
+                        <Font size="14.0" />
+                     </font></Text>
+                  <Text fill="WHITE" layoutX="14.0" layoutY="104.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="Ablation" text="Velocidade">
+                     <font>
+                        <Font size="14.0" />
+                     </font></Text>
+               </children>
+            </Pane>
+            <ImageView fitHeight="45.0" fitWidth="46.0" layoutX="55.0" layoutY="9.0" pickOnBounds="true" preserveRatio="true" styleClass="menu-item">
+               <image>
+                  <Image url="@../assets/img/hamburguer-menu.png" />
+               </image>
+               <effect>
+                  <Bloom />
+               </effect>
+            </ImageView>
+            <ToolBar layoutX="741.0" layoutY="2.0" prefHeight="61.0" prefWidth="200.0" styleClass="toolbar" stylesheets="@../assets/css/gui.css">
+               <items>
+                  <ImageView fitHeight="51.0" fitWidth="60.0" opacity="0.8" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../assets/img/cubeicon.png" />
+                     </image>
+                  </ImageView>
+                  <Label prefHeight="28.0" prefWidth="130.0" styleClass="Ablation" stylesheets="@../assets/css/gui.css" text="CUBESATS" textAlignment="CENTER" textFill="WHITE">
+                     <font>
+                        <Font size="19.0" />
+                     </font>
+                  </Label>
+               </items>
+            </ToolBar>
+            <ToolBar layoutX="500.0" layoutY="1.0" prefHeight="61.0" prefWidth="200.0" styleClass="toolbar" stylesheets="@../assets/css/gui.css">
+               <items>
+                  <ImageView fitHeight="51.0" fitWidth="60.0" opacity="0.8" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../assets/img/search.png" />
+                     </image>
+                  </ImageView>
+                  <Label prefHeight="28.0" prefWidth="130.0" styleClass="Ablation" stylesheets="@../assets/css/gui.css" text="EXPLORAR" textAlignment="CENTER" textFill="WHITE">
+                     <font>
+                        <Font size="19.0" />
+                     </font>
+                  </Label>
+               </items>
+            </ToolBar>
+            <ToolBar layoutX="987.0" prefHeight="61.0" prefWidth="204.0" styleClass="toolbar" stylesheets="@../assets/css/gui.css">
+               <items>
+                  <ImageView fitHeight="54.0" fitWidth="80.0" opacity="0.81" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../assets/img/equipe.png" />
+                     </image>
+                  </ImageView>
+                  <Label prefHeight="28.0" prefWidth="102.0" styleClass="Ablation" stylesheets="@../assets/css/gui.css" text="Equipes" textAlignment="CENTER" textFill="WHITE">
+                     <font>
+                        <Font size="19.0" />
+                     </font>
+                  </Label>
+               </items>
+            </ToolBar>
+            <ToolBar layoutX="124.0" layoutY="2.0" prefHeight="61.0" prefWidth="378.0" styleClass="toolbar" stylesheets="@../assets/css/gui.css">
+               <items>
+                  <ImageView fitHeight="51.0" fitWidth="60.0" opacity="0.8" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../assets/img/logo.png" />
+                     </image>
+                  </ImageView>
+                  <Label prefHeight="28.0" prefWidth="302.0" styleClass="TheSeasons" stylesheets="@../assets/css/gui.css" text="Cubesat Telemetry Enviroment" textAlignment="CENTER" textFill="WHITE">
+                     <font>
+                        <Font name="FSP DEMO - The Seasons Regular" size="19.0" />
+                     </font>
+                  </Label>
+               </items>
+            </ToolBar>
+         </children>
+    </AnchorPane>
+  </children>
+</VBox>

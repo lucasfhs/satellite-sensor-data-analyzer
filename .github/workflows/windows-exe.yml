@@ -18,7 +18,7 @@ jobs:
     defaults:
       run:
         shell: pwsh
-        working-directory: gui3d
+        working-directory: desktop-app
 
     steps:
       - name: Checkout
@@ -57,7 +57,7 @@ jobs:
             --vendor "CEFET-MG Aerospace" `
             --description "Analisador de telemetria de CubeSat" `
             --input target\app `
-            --main-jar gui3d-2.0.0.jar `
+            --main-jar satellite-sensor-analyzer-2.0.0.jar `
             --main-class com.aerospace.gui3d.AppLauncher `
             --dest target\installer `
             --add-modules ALL-MODULE-PATH `
@@ -72,7 +72,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: SatelliteSensorAnalyzer-windows-x64
-          path: gui3d/target/installer/*.exe
+          path: desktop-app/target/installer/*.exe
           if-no-files-found: error
           retention-days: 14
 

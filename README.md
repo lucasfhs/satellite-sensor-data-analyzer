@@ -8,7 +8,7 @@ The project was originally developed as part of the CEFET-MG aerospace extension
 
 ## Preview
 
-![Satellite Sensor Data Analyzer preview](gui3d/preview.gif)
+![Satellite Sensor Data Analyzer preview](desktop-app/preview.gif)
 
 ## Features
 
@@ -42,7 +42,7 @@ On the welcome screen, select **INICIAR DEMONSTRAÇÃO** to explore the applicat
 ### Demonstration mode
 
 ```powershell
-cd gui3d
+cd desktop-app
 mvn clean javafx:run
 ```
 
@@ -52,14 +52,14 @@ The application can also be launched directly in demonstration mode by passing t
 
 ### PostgreSQL mode
 
-Restore `databaseSample.sql` into a PostgreSQL database, then configure the connection before starting the application:
+Restore [`database/sample-database.sql`](database/sample-database.sql) into a PostgreSQL database, then configure the connection before starting the application:
 
 ```powershell
 $env:SATELLITE_DB_URL = "jdbc:postgresql://localhost:5432/tccaerospace"
 $env:SATELLITE_DB_USER = "postgres"
 $env:SATELLITE_DB_PASSWORD = "your-password"
 
-cd gui3d
+cd desktop-app
 mvn clean javafx:run
 ```
 

@@ -25,4 +25,4 @@ replay_pid*
 
 # Maven / IDE build output
 target/
-gui3d/target/
+desktop-app/target/
