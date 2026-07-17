@@ -44,3 +44,14 @@ O workflow [windows-exe.yml](.github/workflows/windows-exe.yml) roda em `windows
 Ele é executado em pushes para `main`/`master`, tags `v*`, pull requests e manualmente por **Actions > Build Windows x64 EXE > Run workflow**. Ao terminar, baixe o artefato `SatelliteSensorAnalyzer-windows-x64`.
 
 O instalador também pode ser gerado localmente no Windows depois de `mvn clean verify`, usando o mesmo comando `jpackage` presente no workflow.
+
+## Publicar um GitHub Release
+
+Todo push de uma tag iniciada por `v` (por exemplo, `v2.0.0`) compila o instalador Win64, cria um GitHub Release com notas geradas automaticamente e anexa o arquivo `.exe` ao release.
+
+```powershell
+git tag v2.0.0
+git push origin v2.0.0
+```
+
+Pushes e pull requests para `main`/`master`, assim como execuções manuais, continuam gerando somente o artefato temporário da execução. Isso permite validar o instalador sem publicar um novo release.

@@ -75,3 +75,26 @@ jobs:
           path: gui3d/target/installer/*.exe
           if-no-files-found: error
           retention-days: 14
+
+  release:
+    name: Publish GitHub Release
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: build-windows-x64
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Download Windows installer
+        uses: actions/download-artifact@v4
+        with:
+          name: SatelliteSensorAnalyzer-windows-x64
+          path: release-assets
+
+      - name: Create release and attach Win64 executable
+        uses: softprops/action-gh-release@v3
+        with:
+          name: Satellite Sensor Analyzer ${{ github.ref_name }}
+          generate_release_notes: true
+          fail_on_unmatched_files: true
+          files: release-assets/*.exe
