@@ -65,17 +65,6 @@ mvn clean javafx:run
 
 Select **CONECTAR AO POSTGRESQL** on the welcome screen. The same values can be provided through the Java properties `satellite.db.url`, `satellite.db.user`, and `satellite.db.password`.
 
-## Windows x64 builds and releases
-
-The [GitHub Actions workflow](.github/workflows/windows-exe.yml) builds the project on `windows-latest` with JDK 21 x64 and uses `jpackage` and WiX to create a self-contained `.exe` installer.
-
-Pushes and pull requests targeting `main` or `master`, as well as manual workflow runs, produce a temporary build artifact for validation. Pushing a tag that starts with `v` creates a GitHub Release and attaches the Windows installer automatically:
-
-```powershell
-git tag v2.0.0
-git push origin v2.0.0
-```
-
 ## Author
 
 Created and maintained by [lucashfsdev](https://github.com/lucasfhs).
